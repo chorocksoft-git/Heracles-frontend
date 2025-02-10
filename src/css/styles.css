@@ -1,0 +1,4 @@
+/* src/styles/index.css (또는 src/tailwind.css) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
