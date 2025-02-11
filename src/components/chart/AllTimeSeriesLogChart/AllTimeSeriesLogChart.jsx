@@ -1,7 +1,7 @@
 // import { useGetCharInfo } from "../../../hooks/chart/useGetChartInfo";
 import { useEffect, useRef, useState } from "react";
 import React from "react";
-import Highcharts from "highcharts";
+import Highcharts, { color } from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { format } from "date-fns";
 import { numberWithCommas } from "../../../utils/numberWithCommas";
@@ -18,7 +18,7 @@ function AllTimeSeriesLogChart() {
   }
 
   const now = new Date(data?.timecode_datetime).getTime();
-  console.log("now", now);
+
   const chartCallback = (chart) => {
     if (chart && chart !== chartRef.current) {
       chartRef.current = chart;
@@ -68,7 +68,6 @@ function AllTimeSeriesLogChart() {
       type: "datetime",
       labels: {
         formatter() {
-          console.log(this.value);
           return format(new Date(this.value), "MM-dd HH:mm");
         },
       },
@@ -96,8 +95,10 @@ function AllTimeSeriesLogChart() {
       crosshairs: true,
       shared: true,
       split: true,
+      borderWidth: 1.5,
+      borderRadius: 4,
       formatter: function (tooltip) {
-        const { x, points, color, y } = this;
+        const { x, points } = this;
         const formatHtml = tooltip.defaultFormatter.call(this, tooltip);
         return formatHtml.map((html, idx, arr) => {
           if (html === "") return "";
@@ -107,12 +108,14 @@ function AllTimeSeriesLogChart() {
               "yyyy-MM-dd HH:mm"
             )}</span><br/>`;
 
-          const point = points?.find((p, i) => html.includes(p.color));
+          const point = points.find((p) => html.includes(p.y));
+
+          console.log(point.y);
 
           return `<span style="color:${point.color}">●</span>
-                <span style="font-size: 10px;"> 
-                ${numberWithCommas(point.y)}
-                </span><br/>`;
+                    <span style="font-size: 10px;">
+                    ${point.series.name}:$ ${numberWithCommas(point.y)}
+                    </span><br/>`;
         });
       },
     },
@@ -121,21 +124,18 @@ function AllTimeSeriesLogChart() {
       ...aiPriceSeries.map((item, index) => ({
         type: "line",
         name: `${index + 1}시간 뒤 예측값`,
-        data: item.data.slice(0, item.data.length - 1).map((value, i) => {
-          const timestamp = now + i * TEN_MINUTES;
-
-          return [
-            timestamp, // x값 (timestamp)
-            value, // y값 (예측값)
-            {
-              symbol: "circle",
-              radius: 4,
-              fillColor: "#007EC8",
-              lineWidth: 2,
-              lineColor: "transparent",
-            },
-          ];
-        }),
+        data: item.data.slice(0, item.data.length - 1).map((value, i) => ({
+          x: now - (data.week_price_chart.length - 1 - i) * 1 * TEN_MINUTES,
+          y: value,
+          color: "#007EC8",
+        })),
+        marker: {
+          symbol: "circle",
+          radius: 4,
+          fillColor: "#007EC8",
+          lineWidth: 2,
+          lineColor: "transparent",
+        },
         lineWidth: 0,
         lineColor: "transparent",
       })),
@@ -143,8 +143,13 @@ function AllTimeSeriesLogChart() {
         type: "line",
         name: "최신 예측값",
         data: aiPriceSeries.map((item, index) => ({
-          x: now * item * ONE_HOUR,
+          x:
+            now -
+            (data.week_price_chart.length - 1 - (item.data.length - 1)) *
+              1 *
+              TEN_MINUTES,
           y: item.data[item.data.length - 1],
+          symbol: "circle",
           marker: {
             radius: 4,
             fillColor: `rgba(255, 0, 0, ${1 - index * 0.15})`,
@@ -153,15 +158,16 @@ function AllTimeSeriesLogChart() {
             symbol: "circle",
           },
         })),
-        lineWidth: 0,
+        color: "#ff0000",
+        lineWidth: 1,
         lineColor: "transparent",
       },
       {
         type: "line",
         name: "실제가격",
         data: data.week_price_chart.map((item, index) => {
-          const timestamp = now + index * TEN_MINUTES;
-
+          const ago = (data.week_price_chart.length - 1 - index) * 1;
+          const timestamp = now - ago * TEN_MINUTES;
           return [timestamp, item];
         }),
 

@@ -150,6 +150,8 @@ function MultiTimeSeriesLogChart() {
       crosshairs: true,
       shared: true,
       split: true,
+      borderWidth: 1.5,
+      borderRadius: 4,
       formatter: function (tooltip) {
         const { x, points } = this;
         const formatHtml = tooltip.defaultFormatter.call(this, tooltip);
