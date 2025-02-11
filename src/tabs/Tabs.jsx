@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import MultiTimeSeriesLogChart from "../components/chart/MultiTimeSeriesLogChart/MultiTimeSeriesLogChart";
 import TimeSeriesLogChart from "../components/chart/TimeSeriesLogChart/TimeSeriesLogChart";
 const Tabs = () => {
