@@ -1,11 +1,13 @@
-import "./App.css";
+import { QueryClientProvider } from "@tanstack/react-query";
 import TimeSeriesLogChart from "./components/chart/TimeSeriesLogChart/TimeSeriesLogChart";
+import "./App.css";
+import { queryClient } from "./services/queryClient";
 
 function App() {
   return (
-    <div className="w-screen">
+    <QueryClientProvider client={queryClient}>
       <TimeSeriesLogChart />
-    </div>
+    </QueryClientProvider>
   );
 }
 
