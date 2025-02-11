@@ -1,3 +1,4 @@
+import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { useGetCharInfo } from "../../../hooks/chart/useGetChartInfo";
@@ -149,6 +150,8 @@ function MultiTimeSeriesLogChart() {
       crosshairs: true,
       shared: true,
       split: true,
+      borderWidth: 1.5,
+      borderRadius: 4,
       formatter: function (tooltip) {
         const { x, points } = this;
         const formatHtml = tooltip.defaultFormatter.call(this, tooltip);
@@ -215,7 +218,7 @@ function MultiTimeSeriesLogChart() {
   };
 
   return (
-    <div className="w-screen">
+    <div className="">
       <div className="flex justify-between items-center">
         <h2>MultiTimeSeriesLogChart</h2>
         <div className="flex gap-2.5">

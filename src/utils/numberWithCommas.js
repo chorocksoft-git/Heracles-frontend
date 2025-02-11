@@ -7,7 +7,7 @@ export function numberWithCommas(x) {
       .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     // 소숫점이 존재하는경우
     if (decimal) {
-      return `${addedCommasIntegar}.${decimal.slice(0, 3)}`;
+      return `${addedCommasIntegar}.${decimal.slice(0, 3).padEnd(3, "0")}`;
     }
     // 존재하지 않는경우
     return `${addedCommasIntegar}`;

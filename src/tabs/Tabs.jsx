@@ -1,6 +1,8 @@
 import { useState } from "react";
 import MultiTimeSeriesLogChart from "../components/chart/MultiTimeSeriesLogChart/MultiTimeSeriesLogChart";
 import TimeSeriesLogChart from "../components/chart/TimeSeriesLogChart/TimeSeriesLogChart";
+import AllTimeSeriesLogChart from "../components/chart/AllTimeSeriesLogChart/AllTimeSeriesLogChart";
+
 const Tabs = () => {
   // 탭을 선택하는 상태
   const [activeTab, setActiveTab] = useState(1);
@@ -9,13 +11,13 @@ const Tabs = () => {
   const renderTabContent = () => {
     switch (activeTab) {
       case 1:
-        return <MultiTimeSeriesLogChart />;
-      case 2:
         return <TimeSeriesLogChart />;
-      case 3:
-        return <div>페이지 3 내용</div>;
-      default:
+      case 2:
         return <MultiTimeSeriesLogChart />;
+      case 3:
+        return <AllTimeSeriesLogChart />;
+      default:
+        return <TimeSeriesLogChart />;
     }
   };
 
