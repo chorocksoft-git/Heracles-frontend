@@ -3,6 +3,7 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import "highcharts/highcharts-more";
 import data from "../../../../data.json";
+import { numberWithCommas } from "../../../utils/numberWithCommas";
 import { format } from "date-fns";
 const dataset = [
   {
@@ -62,7 +63,7 @@ const options = {
       tickAmount: 10,
       labels: {
         formatter() {
-          return this.value;
+          return numberWithCommas(this.value);
         },
       },
       title: { text: "" },
@@ -76,9 +77,8 @@ const options = {
     shared: true,
     split: true,
     formatter: function (tooltip) {
-      const { x, points, color } = this;
+      const { x, points, color, y } = this;
       const formatHtml = tooltip.defaultFormatter.call(this, tooltip);
-
       return formatHtml.map((html, idx, arr) => {
         if (html === "") return "";
         if (idx === 0)
@@ -88,10 +88,11 @@ const options = {
           )}</span><br/>`;
 
         const point = points?.find((p, i) => html.includes(p.color));
+        console.log("point", point);
 
-        return `<span style="color:${point?.color}">●</span>
+        return `<span style="color:${point.color}">●</span>
                 <span style="font-size: 10px;"> 
-                 ${point?.y}
+                ${numberWithCommas(point.y)}
                 </span><br/>`;
       });
     },
@@ -99,7 +100,7 @@ const options = {
 
   series: [
     ...dataset.map((item, index) => ({
-      type: "scatter",
+      type: "line",
       name: item.time,
       data: item.data.map((value, i) => [i, value]), // 시간대에 맞게 X,Y 데이터 매핑
       marker: {
@@ -107,15 +108,17 @@ const options = {
         fillColor: "#007EC8", // 점의 색상
         lineWidth: 2,
         lineColor: "transparent",
+        // lineColor: "#007EC8",
         symbol: "circle",
       },
+      lineWidth: 0,
+      lineColor: "transparent",
     })),
     {
       type: "line",
       name: "실제가격",
       data: data.week_price_chart,
       zIndex: 1,
-      type: "line",
       color: "#45B341",
       marker: {
         enabled: false,

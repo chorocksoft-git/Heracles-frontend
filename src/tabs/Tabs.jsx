@@ -9,13 +9,13 @@ const Tabs = () => {
   const renderTabContent = () => {
     switch (activeTab) {
       case 1:
-        return <MultiTimeSeriesLogChart />;
-      case 2:
         return <TimeSeriesLogChart />;
-      case 3:
+      case 2:
         return <div>페이지 3 내용</div>;
-      default:
+      case 3:
         return <MultiTimeSeriesLogChart />;
+      default:
+        return <TimeSeriesLogChart />;
     }
   };
 
