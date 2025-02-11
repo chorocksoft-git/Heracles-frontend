@@ -5,13 +5,13 @@ import { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import { numberWithCommas } from "../../../utils/numberWithCommas";
 
-const TEN_MINUTES = 10 * 60 * 1000;
+const ONE_HOUR = 60 * 60 * 1000;
 
 function TimeSeriesLogChart() {
   const { data, isSuccess } = useGetCharInfo({ cc_idx: 21 });
   const chartRef = useRef(null);
   const chartBlueRef = useRef([]);
-  const [chartHour, setChartHour] = useState(6);
+  const [chartHour, setChartHour] = useState(24);
 
   // ✅ 차트가 생성될 때 `chartRef`를 최신 상태로 유지
   const chartCallback = (chart) => {
@@ -37,8 +37,8 @@ function TimeSeriesLogChart() {
     if (greenSeries) {
       const chartAddTime = data.week_price_chart
         .map((item, index) => {
-          const minutesAgo = (data.week_price_chart.length - 1 - index) * 10;
-          const timestamp = now - minutesAgo * 60 * 1000;
+          const ago = (data.week_price_chart.length - 1 - index) * 1;
+          const timestamp = now - ago * ONE_HOUR;
           return [timestamp, item];
         })
         .filter((_, index) => index >= 144 - Number(chartHour));
@@ -56,7 +56,7 @@ function TimeSeriesLogChart() {
         y: redSeries[0].data[0].y,
       };
 
-      const futureTime = now + 1 * TEN_MINUTES;
+      const futureTime = now + 1 * ONE_HOUR;
 
       if ((firstRedPoint, futureTime !== firstRedPoint.x)) {
         chartBlueRef.current = [
@@ -84,11 +84,11 @@ function TimeSeriesLogChart() {
     // 5. 새로운 빨간색 시리즈 추가
     data.ai_price_chart.forEach((prediction, index) => {
       const opacity = 1 - index * 0.15;
-      const futureTime = now + (index + 1) * TEN_MINUTES;
+      const futureTime = now + (index + 1) * ONE_HOUR;
 
       chart.addSeries(
         {
-          name: `${(index + 1) * 10}분 뒤`,
+          name: `${index + 1}시간 뒤`,
           data: [[futureTime, prediction]],
           type: "line",
           color: `rgba(255, 0, 0, ${opacity})`,
@@ -191,10 +191,18 @@ function TimeSeriesLogChart() {
       <div className="flex justify-between items-center">
         <h2>TimeSeriesLogChart</h2>
         <div className="flex gap-2.5">
-          <button onClick={() => setChartHour(6)}>1h</button>
-          <button onClick={() => setChartHour(36)}>6h</button>
-          <button onClick={() => setChartHour(72)}>12h</button>
-          <button onClick={() => setChartHour(144)}>24h</button>
+          <button
+            className={`${chartHour === 24 && "bg-[#646cff] text-white"}`}
+            onClick={() => setChartHour(24)}
+          >
+            1D
+          </button>
+          <button
+            className={`${chartHour === 144 && "bg-[#646cff] text-white"}`}
+            onClick={() => setChartHour(144)}
+          >
+            6D
+          </button>
         </div>
       </div>
       <HighchartsReact
