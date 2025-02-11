@@ -154,21 +154,39 @@ function MultiTimeSeriesLogChart() {
         const { x, points } = this;
         const formatHtml = tooltip.defaultFormatter.call(this, tooltip);
 
-        return formatHtml.map((html, idx) => {
-          if (html === "") return "";
-          if (idx === 0)
-            return `<span style="font-size: 10px;">${format(
-              x,
-              "yyyy-MM-dd HH:mm"
-            )}</span><br/>`;
+        if (points) {
+          return formatHtml.map((html, idx) => {
+            if (html === "") return "";
+            if (idx === 0)
+              return `<span style="font-size: 10px;">${format(
+                x,
+                "yyyy-MM-dd HH:mm"
+              )}</span><br/>`;
 
-          const point = points.find((p) => html.includes(p.color));
+            const point = points.find((p) => html.includes(p.color));
 
-          return `<span style="color:${point.color}">●</span>
+            return `<span style="color:${point.color}">●</span>
                   <span style="font-size: 10px;"> 
                     coinName : symbol ${numberWithCommas(point.y)}
                   </span><br/>`;
-        });
+          });
+        } else {
+          return formatHtml.map((html, idx) => {
+            const { x, point } = this;
+
+            if (html === "") return "1111";
+            if (idx === 0) {
+              return `<span style="font-size: 10px;">${format(
+                x,
+                "yyyy-MM-dd HH:mm"
+              )}</span><br/>`;
+            }
+            return `<span style="color:${point.color}">●</span>
+                  <span style="font-size: 10px;"> 
+                    coinName : symbol ${numberWithCommas(point.y)}
+                  </span><br/>`;
+          });
+        }
       },
     },
     series: [
@@ -184,9 +202,15 @@ function MultiTimeSeriesLogChart() {
         name: "Prediction History",
         data: [],
         id: "series2",
-        type: "scatter",
+        type: "line",
+        lineWidth: 0,
         color: "#007EC8",
         marker: { symbol: "circle", radius: 5 },
+        states: {
+          hover: {
+            lineWidthPlus: 0, // 호버 시 선 두께 증가 방지
+          },
+        },
       },
     ],
   };
