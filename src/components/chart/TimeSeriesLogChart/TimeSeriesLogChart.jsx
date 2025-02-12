@@ -11,7 +11,7 @@ function TimeSeriesLogChart() {
   const { data, isSuccess } = useGetCharInfo({ cc_idx: 21 });
   const chartRef = useRef(null);
   const chartBlueRef = useRef([]);
-  const [chartHour, setChartHour] = useState(24);
+  const [chartHour, setChartHour] = useState(12);
 
   // ✅ 차트가 생성될 때 `chartRef`를 최신 상태로 유지
   const chartCallback = (chart) => {
@@ -21,7 +21,6 @@ function TimeSeriesLogChart() {
   };
 
   useEffect(() => {
-    console.log("useEffect rerender");
     if (!chartRef.current || !data) return;
 
     const chart = chartRef.current;
@@ -193,6 +192,12 @@ function TimeSeriesLogChart() {
       <div className="flex justify-between items-center">
         <h2>TimeSeriesLogChart</h2>
         <div className="flex gap-2.5">
+          <button
+            className={`${chartHour === 12 && "bg-[#646cff] text-white"}`}
+            onClick={() => setChartHour(12)}
+          >
+            12H
+          </button>
           <button
             className={`${chartHour === 24 && "bg-[#646cff] text-white"}`}
             onClick={() => setChartHour(24)}
