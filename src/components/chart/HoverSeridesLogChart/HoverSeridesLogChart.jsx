@@ -8,7 +8,7 @@ import { numberWithCommas } from "../../../utils/numberWithCommas";
 import { useGetChartAllData } from "../../../hooks/chart/useGetChartAllData";
 const ONE_HOUR = 60 * 60 * 1000;
 const TEN_MINUTES = 10 * 60 * 1000;
-function AllTimeSeriesLogChart() {
+function HoverSeridesLogChart() {
   const { data, isSuccess, isLoading } = useGetChartAllData({ cc_idx: 21 });
   const chartRef = useRef(null);
   const [chartHour, setChartHour] = useState(24);
@@ -44,7 +44,8 @@ function AllTimeSeriesLogChart() {
       data: data.ai_price_6h_chart,
     },
   ];
-
+  let hoverTimeout;
+  let outTimeout;
   const options = {
     chart: {
       backgroundColor: "rgba(255, 255, 255, 0)",
@@ -97,9 +98,17 @@ function AllTimeSeriesLogChart() {
       split: true,
       borderWidth: 1.5,
       borderRadius: 4,
+      hideDelay: 500,
       formatter: function (tooltip) {
         const { x, points } = this;
+        // const chart = chartRef.current;
+        // let seriesFound = chart.series.find((s) =>
+        //   s.options.id?.startsWith("hoverSeries_")
+        // );
+        // console.log("seriesFound", seriesFound);
+
         const formatHtml = tooltip.defaultFormatter.call(this, tooltip);
+
         return formatHtml.map((html, idx, arr) => {
           if (html === "") return "";
           if (idx === 0)
@@ -109,8 +118,6 @@ function AllTimeSeriesLogChart() {
             )}</span><br/>`;
 
           const point = points.find((p) => html.includes(p.y));
-
-          console.log(point.y);
 
           return `<span style="color:${point.color}">●</span>
                     <span style="font-size: 10px;">
@@ -122,6 +129,7 @@ function AllTimeSeriesLogChart() {
 
     series: [
       ...aiPriceSeries.map((item, index) => ({
+        id: `hoverSeries_${index}`,
         type: "line",
         name: `${index + 1}시간 뒤 예측값`,
         data: item.data.slice(0, item.data.length - 1).map((value, i) => ({
@@ -138,6 +146,32 @@ function AllTimeSeriesLogChart() {
         },
         lineWidth: 0,
         lineColor: "transparent",
+        // visible: false,
+        opacity: 0,
+        events: {
+          mouseOver() {
+            clearTimeout(outTimeout);
+
+            this.chart.series.forEach((s) => {
+              if (s.options.id?.startsWith("hoverSeries_")) {
+                s.update({ opacity: 1 }, false);
+              }
+            });
+            this.chart.redraw();
+          },
+          mouseOut() {
+            clearTimeout(hoverTimeout);
+
+            outTimeout = setTimeout(() => {
+              this.chart.series.forEach((s) => {
+                if (s.options.id?.startsWith("hoverSeries_")) {
+                  s.update({ opacity: 0 }, false);
+                }
+              });
+              this.chart.redraw();
+            }, 800);
+          },
+        },
       })),
       {
         type: "line",
@@ -161,6 +195,7 @@ function AllTimeSeriesLogChart() {
         color: "#ff0000",
         lineWidth: 1,
         lineColor: "transparent",
+        visible: true,
       },
       {
         type: "line",
@@ -175,14 +210,16 @@ function AllTimeSeriesLogChart() {
         marker: {
           enabled: false,
         },
+        visible: true,
       },
     ],
   };
 
   return (
     <div>
+      <h2>Hover Chart Prediction Values</h2>
       <HighchartsReact highcharts={Highcharts} options={options} />
     </div>
   );
 }
-export default AllTimeSeriesLogChart;
+export default HoverSeridesLogChart;
