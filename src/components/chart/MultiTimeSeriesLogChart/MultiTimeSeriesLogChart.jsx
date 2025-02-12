@@ -59,17 +59,10 @@ function MultiTimeSeriesLogChart() {
         })
         .filter((point) => point !== null);
 
-      const futureTime = now + 1 * ONE_HOUR;
+      const futureTime = now + 1 * (ONE_HOUR * 6);
 
-      if (newBluePoints[0][0] !== futureTime) {
-        chartBlueRef.current = [
-          ...new Map(
-            [...chartBlueRef.current, ...newBluePoints].map((item) => [
-              JSON.stringify(item),
-              item,
-            ])
-          ).values(),
-        ];
+      if (newBluePoints[newBluePoints.length - 1][0] !== futureTime) {
+        chartBlueRef.current = [...chartBlueRef.current, ...newBluePoints];
 
         blueSeries.update(
           {
