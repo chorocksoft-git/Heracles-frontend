@@ -40,7 +40,7 @@ h1 {
 
 button {
   border-radius: 8px;
-  border: 2px solid #ccc;
+  border: 2px solid #ececec;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
@@ -52,10 +52,10 @@ button {
 button:hover {
   border: 2px solid #646cff;
 }
-/* button:focus,
+button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-} */
+  outline: 4px auto #646cff;
+}
 
 @media (prefers-color-scheme: light) {
   :root {
