@@ -1,4 +1,3 @@
-import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { useGetCharInfo } from "../../../hooks/chart/useGetChartInfo";
@@ -12,7 +11,7 @@ function MultiTimeSeriesLogChart() {
   const { data, isSuccess } = useGetCharInfo({ cc_idx: 21 });
   const chartRef = useRef(null);
   const chartBlueRef = useRef([]);
-  const [chartHour, setChartHour] = useState(24);
+  const [chartHour, setChartHour] = useState(12);
 
   // ✅ 차트가 생성될 때 `chartRef`를 최신 상태로 유지
   const chartCallback = (chart) => {
@@ -222,6 +221,12 @@ function MultiTimeSeriesLogChart() {
       <div className="flex justify-between items-center">
         <h2>MultiTimeSeriesLogChart</h2>
         <div className="flex gap-2.5">
+          <button
+            className={`${chartHour === 12 && "bg-[#646cff] text-white"}`}
+            onClick={() => setChartHour(12)}
+          >
+            12H
+          </button>
           <button
             className={`${chartHour === 24 && "bg-[#646cff] text-white"}`}
             onClick={() => setChartHour(24)}

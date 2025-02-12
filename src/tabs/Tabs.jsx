@@ -59,7 +59,18 @@ const Tabs = () => {
 
       {/* 탭 콘텐츠 영역 */}
       <div className="p-4 border-t-2 border-gray-300 rounded-b-lg">
-        {renderTabContent()}
+        <div className={`${activeTab === 1 ? "block" : "hidden"}`}>
+          <TimeSeriesLogChart />
+        </div>
+        <div className={`${activeTab === 2 ? "block" : "hidden"}`}>
+          <MultiTimeSeriesLogChart />
+        </div>
+        <div className={`${activeTab === 3 ? "block" : "hidden"}`}>
+          <AllTimeSeriesLogChart />
+        </div>
+        <div className={`${activeTab === 4 ? "block" : "hidden"}`}>
+          <TimeSeriesLogChart />
+        </div>
       </div>
     </div>
   );
