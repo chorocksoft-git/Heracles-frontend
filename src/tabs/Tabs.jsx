@@ -2,7 +2,7 @@ import { useState } from "react";
 import MultiTimeSeriesLogChart from "../components/chart/MultiTimeSeriesLogChart/MultiTimeSeriesLogChart";
 import TimeSeriesLogChart from "../components/chart/TimeSeriesLogChart/TimeSeriesLogChart";
 import AllTimeSeriesLogChart from "../components/chart/AllTimeSeriesLogChart/AllTimeSeriesLogChart";
-import HoverSeridesLogChart from "../components/chart/HoverSeridesLogChart/HoverSeridesLogChart";
+import HoverSeriesLogChart from "../components/chart/HoverSeriesLogChart/HoverSeriesLogChart";
 
 const Tabs = () => {
   // 탭을 선택하는 상태
@@ -18,7 +18,7 @@ const Tabs = () => {
       case 3:
         return <AllTimeSeriesLogChart />;
       case 4:
-        return <HoverSeridesLogChart />;
+        return <HoverSeriesLogChart />;
       default:
         return <TimeSeriesLogChart />;
     }
@@ -27,13 +27,13 @@ const Tabs = () => {
   return (
     <div className="">
       {/* 탭 버튼 영역 */}
-      <div className="flex mb-1">
+      <div className="flex ">
         <button
           className={`${
             activeTab === 1
               ? "bg-[#646cff] text-white"
               : "bg-[#fff] text-gray-600 "
-          } py-2 px-4 cursor-pointer  rounded-tl-lg transition-all duration-300 mr-2`}
+          } py-2 px-4 cursor-pointer  rounded-tl-lg transition-all duration-300 mr-2 shadow-[1px_1px_1px_rgba(0,0,0,0.15)]`}
           onClick={() => setActiveTab(1)}
         >
           chart 1
@@ -43,7 +43,7 @@ const Tabs = () => {
             activeTab === 2
               ? "bg-[#646cff] text-white"
               : "bg-[#fff] text-gray-600"
-          } py-2 px-4 cursor-pointer  transition-all duration-300  mr-2`}
+          } py-2 px-4 cursor-pointer  transition-all duration-300  mr-2 shadow-[1px_1px_1px_rgba(0,0,0,0.15)]`}
           onClick={() => setActiveTab(2)}
         >
           chart 2
@@ -53,7 +53,7 @@ const Tabs = () => {
             activeTab === 3
               ? "bg-[#646cff] text-white"
               : "bg-[#fff] text-gray-600"
-          } py-2 px-4 cursor-pointer  rounded-tr-lg transition-all duration-300 mr-2`}
+          } py-2 px-4 cursor-pointer  rounded-tr-lg transition-all duration-300 mr-2 shadow-[1px_1px_1px_rgba(0,0,0,0.15)]`}
           onClick={() => setActiveTab(3)}
         >
           chart 3
@@ -63,7 +63,7 @@ const Tabs = () => {
             activeTab === 4
               ? "bg-[#646cff] text-white"
               : "bg-[#fff] text-gray-600"
-          } py-2 px-4 cursor-pointer  rounded-tr-lg transition-all duration-300`}
+          } py-2 px-4 cursor-pointer  rounded-tr-lg transition-all duration-300 shadow-[1px_1px_1px_rgba(0,0,0,0.15)]`}
           onClick={() => setActiveTab(4)}
         >
           chart 4
@@ -82,7 +82,7 @@ const Tabs = () => {
           <AllTimeSeriesLogChart />
         </div>
         <div className={`${activeTab === 4 ? "block" : "hidden"}`}>
-          <TimeSeriesLogChart />
+          <HoverSeriesLogChart />
         </div>
       </div>
     </div>

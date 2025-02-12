@@ -11,7 +11,7 @@ const TEN_MINUTES = 10 * 60 * 1000;
 function HoverSeridesLogChart() {
   const { data, isSuccess, isLoading } = useGetChartAllData({ cc_idx: 21 });
   const chartRef = useRef(null);
-  const [chartHour, setChartHour] = useState(24);
+  const [chartHour, setChartHour] = useState(12);
 
   if (isLoading || !data) {
     return <div className="flex">loading...</div>;
@@ -24,24 +24,38 @@ function HoverSeridesLogChart() {
       chartRef.current = chart;
     }
   };
+  const scaleFactor = chartHour / 144;
+
   const aiPriceSeries = [
     {
-      data: data.ai_price_1h_chart,
+      data: data.ai_price_1h_chart.slice(
+        -Math.max(13, Math.round(150 * scaleFactor))
+      ),
     },
     {
-      data: data.ai_price_2h_chart,
+      data: data.ai_price_2h_chart.slice(
+        -Math.max(14, Math.round(156 * scaleFactor))
+      ),
     },
     {
-      data: data.ai_price_3h_chart,
+      data: data.ai_price_3h_chart.slice(
+        -Math.max(15, Math.round(162 * scaleFactor))
+      ),
     },
     {
-      data: data.ai_price_4h_chart,
+      data: data.ai_price_4h_chart.slice(
+        -Math.max(16, Math.round(168 * scaleFactor))
+      ),
     },
     {
-      data: data.ai_price_5h_chart,
+      data: data.ai_price_5h_chart.slice(
+        -Math.max(17, Math.round(174 * scaleFactor))
+      ),
     },
     {
-      data: data.ai_price_6h_chart,
+      data: data.ai_price_6h_chart.slice(
+        -Math.max(18, Math.round(180 * scaleFactor))
+      ),
     },
   ];
   let hoverTimeout;
@@ -200,7 +214,7 @@ function HoverSeridesLogChart() {
       {
         type: "line",
         name: "실제가격",
-        data: data.week_price_chart.map((item, index) => {
+        data: data.week_price_chart.slice(-chartHour).map((item, index) => {
           const ago = (data.week_price_chart.length - 1 - index) * 1;
           const timestamp = now - ago * TEN_MINUTES;
           return [timestamp, item];
@@ -217,7 +231,29 @@ function HoverSeridesLogChart() {
 
   return (
     <div>
-      <h2>Hover Chart Prediction Values</h2>
+      <div className="flex justify-between items-center">
+        <h2>Hover Chart Prediction Values</h2>
+        <div className="flex gap-2.5">
+          <button
+            className={`${chartHour === 12 && "bg-[#646cff] text-white"}`}
+            onClick={() => setChartHour(12)}
+          >
+            12H
+          </button>
+          <button
+            className={`${chartHour === 24 && "bg-[#646cff] text-white"}`}
+            onClick={() => setChartHour(24)}
+          >
+            1D
+          </button>
+          <button
+            className={`${chartHour === 144 && "bg-[#646cff] text-white"}`}
+            onClick={() => setChartHour(144)}
+          >
+            6D
+          </button>
+        </div>
+      </div>
       <HighchartsReact highcharts={Highcharts} options={options} />
     </div>
   );
