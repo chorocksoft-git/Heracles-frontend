@@ -8,22 +8,6 @@ const Tabs = () => {
   // 탭을 선택하는 상태
   const [activeTab, setActiveTab] = useState(1);
 
-  // 각 탭에 해당하는 내용
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 1:
-        return <TimeSeriesLogChart />;
-      case 2:
-        return <MultiTimeSeriesLogChart />;
-      case 3:
-        return <AllTimeSeriesLogChart />;
-      case 4:
-        return <HoverSeriesLogChart />;
-      default:
-        return <TimeSeriesLogChart />;
-    }
-  };
-
   return (
     <div className="">
       {/* 탭 버튼 영역 */}
