@@ -82,7 +82,7 @@ const Tabs = () => {
           <AllTimeSeriesLogChart />
         </div>
         <div className={`${activeTab === 4 ? "block" : "hidden"}`}>
-          <TimeSeriesLogChart />
+          <HoverSeriesLogChart />
         </div>
       </div>
     </div>
