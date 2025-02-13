@@ -62,13 +62,19 @@ function MultiTimeSeriesLogChart() {
       const futureTime = now + 1 * (ONE_HOUR * 6);
 
       if (newBluePoints[newBluePoints.length - 1][0] !== futureTime) {
+        console.log(chartBlueRef.current, " + ", newBluePoints, " = ", [
+          ...chartBlueRef.current,
+          ...newBluePoints,
+        ]);
+
         chartBlueRef.current = [...chartBlueRef.current, ...newBluePoints];
 
         blueSeries.update(
           {
             data: chartBlueRef.current.filter(
               (_, index) =>
-                index >= chartBlueRef.current.length - Number(chartHour)
+                index >=
+                chartBlueRef.current.length - 36 + Number(chartHour * 6)
             ),
           },
           true
@@ -199,7 +205,12 @@ function MultiTimeSeriesLogChart() {
         type: "line",
         lineWidth: 0,
         color: "#007EC8",
-        marker: { symbol: "circle", radius: 5 },
+        marker: {
+          symbol: "circle",
+          radius: 5,
+          enabled: true, // 항상 마커 표시
+          enabledThreshold: 0, // 데이터 개수와 관계없이 마커 표시
+        },
         states: {
           hover: {
             lineWidthPlus: 0, // 호버 시 선 두께 증가 방지
