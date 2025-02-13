@@ -74,7 +74,7 @@ function MultiTimeSeriesLogChart() {
             data: chartBlueRef.current.filter(
               (_, index) =>
                 index >=
-                chartBlueRef.current.length - 36 + Number(chartHour * 6)
+                chartBlueRef.current.length - 36 - Number(chartHour * 6)
             ),
           },
           true
