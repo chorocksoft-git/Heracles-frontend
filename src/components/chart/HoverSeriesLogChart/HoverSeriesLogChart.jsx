@@ -145,7 +145,7 @@ function HoverSeridesLogChart() {
       ...aiPriceSeries.map((item, index) => ({
         id: `hoverSeries_${index}`,
         type: "line",
-        name: `${index + 1}시간 뒤 예측값`,
+        name: `${index + 1}시간 전에 예측한 값`,
         data: item.data.slice(0, item.data.length - 1).map((value, i) => ({
           x: now - (data.week_price_chart.length - 1 - i) * 1 * TEN_MINUTES,
           y: value,
