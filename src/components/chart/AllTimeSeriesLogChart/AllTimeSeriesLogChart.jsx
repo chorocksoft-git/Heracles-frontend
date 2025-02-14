@@ -139,22 +139,26 @@ function AllTimeSeriesLogChart() {
     series: [
       ...aiPriceSeries.map((item, index) => ({
         type: "line",
-        name: `${index + 1}시간 뒤 예측값`,
+        name: `${index + 1}시간 전에 예측한 값`,
         data: item.data.slice(0, item.data.length - 1).map((value, i) => ({
           x: now - (data.week_price_chart.length - 1 - i) * 1 * TEN_MINUTES,
           y: value,
-          color: "#007EC8",
+          color: "#6DC9FF",
         })),
         marker: {
           symbol: "circle",
-          radius: 4,
-          fillColor: "#007EC8",
+          radius: 3,
+          fillColor: "#fff",
           lineWidth: 2,
-          lineColor: "transparent",
+          lineColor: "#6DC9FF",
+          //   enabled: false,
         },
-        lineWidth: 0,
-        lineColor: "transparent",
+        // lineWidth: 0,
+        // lineColor: "transparent",
+        lineWidth: 1,
+        lineColor: "#6DC9FF",
       })),
+
       {
         type: "line",
         name: "최신 예측값",
@@ -167,7 +171,7 @@ function AllTimeSeriesLogChart() {
           y: item.data[item.data.length - 1],
           symbol: "circle",
           marker: {
-            radius: 4,
+            radius: 5,
             fillColor: `rgba(255, 0, 0, ${1 - index * 0.15})`,
             lineWidth: 2,
             lineColor: "transparent",
@@ -188,8 +192,17 @@ function AllTimeSeriesLogChart() {
         }),
 
         color: "#45B341",
+        lineWidth: 3,
+        // marker: {
+        //   enabled: false,
+        // },
         marker: {
-          enabled: false,
+          symbol: "circle",
+          radius: 4,
+          fillColor: "#45B341",
+          lineWidth: 2,
+          lineColor: "transparent",
+          // enabled: false,
         },
       },
     ],
