@@ -1,8 +1,9 @@
 // import { useGetCharInfo } from "../../../hooks/chart/useGetChartInfo";
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import React from "react";
 import Highcharts, { color } from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import "highcharts/highcharts-more";
 import { format } from "date-fns";
 import { numberWithCommas } from "../../../utils/numberWithCommas";
 import { useGetChartAllData } from "../../../hooks/chart/useGetChartAllData";
@@ -59,7 +60,33 @@ function AllTimeSeriesLogChart() {
     },
   ];
 
-  console.log("aiPriceSeries", aiPriceSeries);
+  const processData = (datasets, now) => {
+    const minMaxData = [];
+
+    const maxLength = Math.max(...datasets.map((d) => d.length));
+    console.log("maxLength", maxLength);
+
+    for (let i = 0; i < maxLength; i++) {
+      // 🔹 데이터가 없는 경우 `filter(Boolean)`으로 제거
+      const valuesAtIndex = datasets.map((d) => d[i]).filter(Boolean);
+      const min = Math.min(...valuesAtIndex);
+      const max = Math.max(...valuesAtIndex);
+
+      if (!isNaN(min) && !isNaN(max)) {
+        const timestamp =
+          now - (data.week_price_chart.length - 1 - i) * TEN_MINUTES;
+
+        console.log(timestamp);
+        minMaxData.push([timestamp, min, max]);
+      }
+    }
+
+    return minMaxData;
+  };
+  const processedData = processData(
+    aiPriceSeries.map((d) => d.data),
+    now
+  );
 
   const options = {
     chart: {
@@ -126,8 +153,6 @@ function AllTimeSeriesLogChart() {
 
           const point = points.find((p) => html.includes(p.y));
 
-          console.log(point.y);
-
           return `<span style="color:${point.color}">●</span>
                     <span style="font-size: 10px;">
                     ${point.series.name}:$ ${numberWithCommas(point.y)}
@@ -151,13 +176,33 @@ function AllTimeSeriesLogChart() {
           fillColor: "#fff",
           lineWidth: 2,
           lineColor: "#6DC9FF",
-          //   enabled: false,
         },
-        // lineWidth: 0,
-        // lineColor: "transparent",
+        // marker: {
+        //   enabled: false,
+        // },
+
         lineWidth: 1,
         lineColor: "#6DC9FF",
       })),
+      {
+        type: "arearange",
+        name: "예측 범위",
+        data: processedData,
+        color: "rgba(150, 200, 250, 0.8)",
+        fillOpacity: 0.2,
+        enableMouseTracking: false,
+        lineWidth: 0,
+        marker: {
+          enabled: false,
+        },
+        zIndex: 0,
+        states: {
+          inactive: {
+            opacity: 1,
+          },
+        },
+        showInLegend: false,
+      },
 
       {
         type: "line",
