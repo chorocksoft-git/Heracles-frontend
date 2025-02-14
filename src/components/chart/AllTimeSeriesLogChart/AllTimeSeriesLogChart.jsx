@@ -177,6 +177,9 @@ function AllTimeSeriesLogChart() {
           lineWidth: 2,
           lineColor: "#6DC9FF",
         },
+        // marker: {
+        //   enabled: false,
+        // },
 
         lineWidth: 1,
         lineColor: "#6DC9FF",
