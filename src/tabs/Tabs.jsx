@@ -42,7 +42,7 @@ const Tabs = () => {
         >
           chart 3
         </button>
-        <button
+        {/* <button
           className={`${
             activeTab === 4
               ? "bg-[#646cff] text-white"
@@ -51,7 +51,7 @@ const Tabs = () => {
           onClick={() => setActiveTab(4)}
         >
           chart 4
-        </button>
+        </button> */}
       </div>
 
       {/* 탭 콘텐츠 영역 */}
@@ -65,9 +65,9 @@ const Tabs = () => {
         <div className={`${activeTab === 3 ? "block" : "hidden"}`}>
           <AllTimeSeriesLogChart />
         </div>
-        <div className={`${activeTab === 4 ? "block" : "hidden"}`}>
+        {/* <div className={`${activeTab === 4 ? "block" : "hidden"}`}>
           <HoverSeriesLogChart />
-        </div>
+        </div> */}
       </div>
     </div>
   );
