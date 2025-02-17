@@ -1,4 +1,4 @@
-name: Deploy hercules test(chart) code
+name: Deploy hercules  test(chart) code
 
 on:
     workflow_call:
